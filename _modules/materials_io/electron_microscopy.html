@@ -159,6 +159,7 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">inst_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">inst_data</span>
             <span class="n">dest</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">em</span>
+
             <span class="n">mapping</span> <span class="o">=</span> <span class="p">[</span>
                 <span class="n">MappingElements</span><span class="p">(</span>
                     <span class="n">source_dict</span><span class="o">=</span><span class="n">source</span><span class="p">,</span> <span class="n">source_path</span><span class="o">=</span><span class="s1">&#39;acquisition_mode&#39;</span><span class="p">,</span>
@@ -177,11 +178,6 @@
                     <span class="n">source_dict</span><span class="o">=</span><span class="n">source</span><span class="p">,</span> <span class="n">source_path</span><span class="o">=</span><span class="s1">&#39;convergence_angle&#39;</span><span class="p">,</span>
                     <span class="n">dest_dict</span><span class="o">=</span><span class="n">dest</span><span class="p">,</span> <span class="n">dest_path</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;General_EM&#39;</span><span class="p">,</span> <span class="s1">&#39;convergence_angle&#39;</span><span class="p">),</span>
                     <span class="n">cast_fn</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;MilliRAD&#39;</span><span class="p">,</span> <span class="n">conv_fn</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                    <span class="n">override</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
-                <span class="n">MappingElements</span><span class="p">(</span>
-                    <span class="n">source_dict</span><span class="o">=</span><span class="n">source</span><span class="p">,</span> <span class="n">source_path</span><span class="o">=</span><span class="s1">&#39;magnification&#39;</span><span class="p">,</span>
-                    <span class="n">dest_dict</span><span class="o">=</span><span class="n">dest</span><span class="p">,</span> <span class="n">dest_path</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;General_EM&#39;</span><span class="p">,</span> <span class="s1">&#39;magnification_indicated&#39;</span><span class="p">),</span>
-                    <span class="n">cast_fn</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;UNITLESS&#39;</span><span class="p">,</span> <span class="n">conv_fn</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                     <span class="n">override</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
                 <span class="n">MappingElements</span><span class="p">(</span>
                     <span class="n">source_dict</span><span class="o">=</span><span class="n">source</span><span class="p">,</span> <span class="n">source_path</span><span class="o">=</span><span class="s1">&#39;microscope&#39;</span><span class="p">,</span>
@@ -233,6 +229,24 @@
                     <span class="n">dest_dict</span><span class="o">=</span><span class="n">dest</span><span class="p">,</span> <span class="n">dest_path</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;SEM&#39;</span><span class="p">,</span> <span class="s1">&#39;working_distance&#39;</span><span class="p">),</span>
                     <span class="n">cast_fn</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;MilliM&#39;</span><span class="p">,</span> <span class="n">conv_fn</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                     <span class="n">override</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
+
+            <span class="c1"># some logic to parse how Zeiss stores floats in their SEM tifs:</span>
+            <span class="n">mag</span> <span class="o">=</span> <span class="n">get_val</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="s1">&#39;magnification&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">mag</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mag</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="k">if</span> <span class="s1">&#39; K X&#39;</span> <span class="ow">in</span> <span class="n">mag</span><span class="p">:</span>
+                    <span class="n">mag</span> <span class="o">=</span> <span class="n">mag</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39; K X&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">mag</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">mag</span><span class="p">)</span>
+                        <span class="n">mag</span> <span class="o">*=</span> <span class="mi">1000</span>
+                    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                        <span class="c1"># don&#39;t do anything if we can&#39;t coerce the value to a float</span>
+                        <span class="k">pass</span>
+
+            <span class="n">mapping</span> <span class="o">+=</span> <span class="p">[</span><span class="n">MappingElements</span><span class="p">(</span>
+                <span class="n">source_dict</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;magnification&#39;</span><span class="p">:</span> <span class="n">mag</span><span class="p">},</span> <span class="n">source_path</span><span class="o">=</span><span class="s1">&#39;magnification&#39;</span><span class="p">,</span>
+                <span class="n">dest_dict</span><span class="o">=</span><span class="n">dest</span><span class="p">,</span> <span class="n">dest_path</span><span class="o">=</span><span class="p">(</span><span class="s1">&#39;General_EM&#39;</span><span class="p">,</span> <span class="s1">&#39;magnification_indicated&#39;</span><span class="p">),</span>
+                <span class="n">cast_fn</span><span class="o">=</span><span class="nb">float</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s1">&#39;UNITLESS&#39;</span><span class="p">,</span> <span class="n">conv_fn</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">override</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span>
 
             <span class="n">map_dict_values</span><span class="p">(</span><span class="n">mapping</span><span class="p">)</span>
 
