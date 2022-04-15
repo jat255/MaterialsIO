@@ -137,6 +137,33 @@
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="materials_io.adapters.base.GreedySerializeAdapter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">materials_io.adapters.base.</span></span><span class="sig-name descname"><span class="pre">GreedySerializeAdapter</span></span><a class="reference internal" href="../_modules/materials_io/adapters/base.html#GreedySerializeAdapter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#materials_io.adapters.base.GreedySerializeAdapter" title="Permalink to this definition"></a></dt>
+<dd><p>Converts the metadata to a string by serializing with JSON, making some (hopefully) informed
+choices about what to do with various types commonly seen, and otherwise reporting that the
+data type could not be serialized. May not work in all situations, but should cover a large
+number of cases.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="materials_io.adapters.base.GreedySerializeAdapter.transform">
+<span class="sig-name descname"><span class="pre">transform</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metadata</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><span class="pre">dict</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.10)"><span class="pre">str</span></a></span></span><a class="reference internal" href="../_modules/materials_io/adapters/base.html#GreedySerializeAdapter.transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#materials_io.adapters.base.GreedySerializeAdapter.transform" title="Permalink to this definition"></a></dt>
+<dd><p>Process metadata into a new form</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>metadata</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – Metadata to transform</p></li>
+<li><p><strong>context</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.10)"><em>dict</em></a>) – Any context information used during transformation</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Metadata in a new form, can be any type of object.
+<code class="docutils literal notranslate"><span class="pre">None</span></code> corresponding</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="materials_io.adapters.base.NOOPAdapter">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">materials_io.adapters.base.</span></span><span class="sig-name descname"><span class="pre">NOOPAdapter</span></span><a class="reference internal" href="../_modules/materials_io/adapters/base.html#NOOPAdapter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#materials_io.adapters.base.NOOPAdapter" title="Permalink to this definition"></a></dt>
 <dd><p>Adapter that does not alter the output data</p>
